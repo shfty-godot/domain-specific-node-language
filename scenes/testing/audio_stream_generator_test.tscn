@@ -1,0 +1,106 @@
+[gd_scene load_steps=3 format=2]
+
+[sub_resource type="AudioStreamGenerator" id=1]
+buffer_length = 1.0
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends AudioStreamPlayer
+tool
+
+enum WaveType {
+	Square,
+	Saw,
+	Sine,
+	Noise,
+	Triangle
+}
+
+# Public Members
+export(WaveType) var wave_type: int = WaveType.Sine
+export(float) var duration := 1.0 setget set_duration
+export(int) var mix_rate := 44100 setget set_mix_rate
+export(float) var pulse_hz := 440.0
+export(float) var slide := 0.0
+export(float) var vibrato_frequency := 0.0
+export(float) var vibrato_range := 0.0
+export(int) var noise_buffer_size := 1024
+
+# Private Members
+var _buffer := PoolVector2Array()
+var _noise_buffer := PoolRealArray()
+
+# Setters
+func set_duration(new_duration: float) -> void:
+	if duration != new_duration:
+		duration = new_duration
+		stream.buffer_length = duration
+
+func set_mix_rate(new_mix_rate: int) -> void:
+	if mix_rate != new_mix_rate:
+		mix_rate = new_mix_rate
+		stream.mix_rate = mix_rate
+
+# Getters
+func get_stream_generator() -> AudioStreamGenerator:
+	return get_stream() as AudioStreamGenerator
+
+func get_stream_generator_playback() -> AudioStreamGeneratorPlayback:
+	return get_stream_playback() as AudioStreamGeneratorPlayback
+
+# Overrides
+func _ready():
+	var stream_generator := get_stream_generator()
+	stream_generator.buffer_length = duration
+
+	_fill_noise_buffer()
+	_fill_buffer()
+	play_buffer()
+
+# Business Logic
+func _fill_noise_buffer() -> void:
+	_noise_buffer = PoolRealArray()
+	for i in range(0, noise_buffer_size):
+		_noise_buffer.append(randf())
+
+func _fill_buffer() -> void:
+	var mix_rate = get_stream_generator().mix_rate
+
+	var hz := pulse_hz
+	var phase := 0.0
+	var vibrato := 0.0
+
+	for _i in range(0, get_stream_generator_playback().get_frames_available()):
+		var vib = sin(vibrato) * vibrato_range
+		_buffer.append(_sample_wave(phase + vib))
+
+		var increment = hz / mix_rate
+		phase += increment
+		vibrato += vibrato_frequency / mix_rate
+		hz += slide / mix_rate
+
+func _sample_wave(phase: float) -> Vector2:
+	var sample := Vector2.ONE
+	match wave_type:
+		WaveType.Square:
+			sample *= round(fmod(phase, 1.0))
+		WaveType.Saw:
+			sample *= fmod(phase, 1.0)
+		WaveType.Noise:
+			var index: int = round(fmod(phase, _noise_buffer.size() - 1))
+			sample *= _noise_buffer[index]
+		WaveType.Triangle:
+			sample *= fmod(phase, 0.5) * 2.0 if fmod(phase, 1.0) >= 0.5 else 1.0 - fmod(phase, 0.5) * 2.0
+		WaveType.Sine:
+			sample *= sin(phase * TAU)
+	return sample
+
+func play_buffer() -> void:
+	get_stream_generator_playback().push_buffer(_buffer)
+"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer"]
+stream = SubResource( 1 )
+autoplay = true
+script = SubResource( 2 )
+wave_type = 4
+slide = 100.0

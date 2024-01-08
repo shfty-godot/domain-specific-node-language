@@ -1,0 +1,99 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "ArrayMesh",
+"class": "ArrayMeshShapeRenderer2D",
+"language": "GDScript",
+"path": "res://2d_shape_dsl/scripts/array_mesh_shape_renderer_2d.gd"
+}, {
+"base": "CanvasItem",
+"class": "CanvasShapeRenderer2D",
+"language": "GDScript",
+"path": "res://2d_shape_dsl/scripts/canvas_shape_renderer_2d.gd"
+}, {
+"base": "Button",
+"class": "CollapseExpandButton",
+"language": "GDScript",
+"path": "res://addons/dsnl/scripts/collapse_expand_button.gd"
+}, {
+"base": "Resource",
+"class": "CommandCircle",
+"language": "GDScript",
+"path": "res://2d_shape_dsl/scripts/commands/circle.gd"
+}, {
+"base": "Resource",
+"class": "CommandPopTransform",
+"language": "GDScript",
+"path": "res://2d_shape_dsl/scripts/commands/pop_transform.gd"
+}, {
+"base": "Resource",
+"class": "CommandPushTransform",
+"language": "GDScript",
+"path": "res://2d_shape_dsl/scripts/commands/push_transform.gd"
+}, {
+"base": "Resource",
+"class": "CommandRect",
+"language": "GDScript",
+"path": "res://2d_shape_dsl/scripts/commands/rect.gd"
+}, {
+"base": "EditorPlugin",
+"class": "DSNLEditorPlugin",
+"language": "GDScript",
+"path": "res://addons/dsnl/plugin.gd"
+}, {
+"base": "Reference",
+"class": "DSNLUtil",
+"language": "GDScript",
+"path": "res://addons/dsnl/util.gd"
+}, {
+"base": "Resource",
+"class": "DrawCommands",
+"language": "GDScript",
+"path": "res://2d_shape_dsl/scripts/draw_commands.gd"
+}, {
+"base": "MeshInstance2D",
+"class": "MeshShapeRenderer2D",
+"language": "GDScript",
+"path": "res://2d_shape_dsl/scripts/mesh_shape_renderer_2d.gd"
+}, {
+"base": "Resource",
+"class": "ResourceTree",
+"language": "GDScript",
+"path": "res://addons/dsnl/scripts/resource_tree.gd"
+} ]
+_global_script_class_icons={
+"ArrayMeshShapeRenderer2D": "",
+"CanvasShapeRenderer2D": "",
+"CollapseExpandButton": "",
+"CommandCircle": "",
+"CommandPopTransform": "",
+"CommandPushTransform": "",
+"CommandRect": "",
+"DSNLEditorPlugin": "",
+"DSNLUtil": "",
+"DrawCommands": "",
+"MeshShapeRenderer2D": "",
+"ResourceTree": ""
+}
+
+[application]
+
+config/name="Domain Specific Node Language"
+run/main_scene="res://scenes/test_dsl.tscn"
+config/icon="res://resources/texture/icon.png"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "dsnl" )
+
+[rendering]
+
+environment/default_environment="res://resources/environment/default_env.tres"

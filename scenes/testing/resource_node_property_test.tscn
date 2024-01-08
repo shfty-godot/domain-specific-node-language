@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://addons/dsnl/scripts/resource_node.gd" type="Script" id=1]
+
+[sub_resource type="AudioEffectEQ21" id=1]
+
+[node name="Node" type="Node"]
+__meta__ = {
+"_editor_description_": "test"
+}
+
+[node name="ResourceNode" type="Node" parent="."]
+pause_mode = 1
+process_priority = 3
+script = ExtResource( 1 )
+resource = SubResource( 1 )

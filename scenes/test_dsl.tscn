@@ -1,0 +1,137 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://addons/dsnl/scripts/dsl_node.gd" type="Script" id=1]
+[ext_resource path="res://addons/dsnl/scripts/resource_node.gd" type="Script" id=2]
+
+[sub_resource type="AudioEffectEQ" id=1]
+band_db/32_hz = -60.0
+band_db/100_hz = -21.4
+band_db/320_hz = -14.0
+band_db/1000_hz = -20.7
+band_db/3200_hz = -39.2
+band_db/10000_hz = -54.7
+
+[sub_resource type="AudioEffectEQ10" id=2]
+band_db/31_hz = -52.2
+band_db/62_hz = -43.1
+band_db/125_hz = -34.2
+band_db/250_hz = -26.4
+band_db/500_hz = -21.9
+band_db/1000_hz = -19.7
+band_db/2000_hz = -14.5
+band_db/4000_hz = -8.9
+band_db/8000_hz = -2.5
+band_db/16000_hz = 6.2
+
+[sub_resource type="AudioEffectEQ21" id=3]
+band_db/22_hz = -54.7
+band_db/32_hz = -44.3
+band_db/44_hz = -31.3
+band_db/63_hz = -17.7
+band_db/90_hz = -5.7
+band_db/175_hz = -6.4
+band_db/250_hz = -15.8
+band_db/350_hz = -19.2
+band_db/500_hz = -21.7
+band_db/700_hz = -22.9
+band_db/1000_hz = -20.4
+band_db/1400_hz = -14.0
+band_db/2000_hz = -10.6
+band_db/2800_hz = -9.6
+band_db/4000_hz = -15.8
+band_db/5600_hz = -25.4
+band_db/8000_hz = -37.4
+band_db/11000_hz = -46.1
+band_db/16000_hz = -48.5
+band_db/22000_hz = -49.8
+
+[sub_resource type="AudioEffectEQ6" id=4]
+band_db/32_hz = -58.4
+band_db/100_hz = -41.4
+band_db/320_hz = -26.9
+band_db/1000_hz = -11.6
+band_db/3200_hz = 7.9
+band_db/10000_hz = 23.9
+
+[node name="TestDSL" type="Node"]
+script = ExtResource( 1 )
+resource_trees = [ {
+"children": [ {
+"children": [  ],
+"node_data": {
+"base_type": "Node",
+"name": "EQ10",
+"properties": {
+"_import_path": NodePath(""),
+"pause_mode": 0,
+"process_priority": 10,
+"resource": SubResource( 2 ),
+"script": ExtResource( 2 )
+}
+},
+"packed": false
+}, {
+"children": [ {
+"children": [  ],
+"node_data": {
+"base_type": "Node",
+"name": "EQ6",
+"properties": {
+"_import_path": NodePath(""),
+"pause_mode": 1,
+"process_priority": 6,
+"resource": SubResource( 4 ),
+"script": ExtResource( 2 )
+}
+},
+"packed": false
+} ],
+"node_data": {
+"base_type": "Node",
+"name": "EQ21",
+"properties": {
+"_import_path": NodePath(""),
+"pause_mode": 2,
+"process_priority": 21,
+"resource": SubResource( 3 ),
+"script": ExtResource( 2 )
+}
+},
+"packed": false
+} ],
+"node_data": {
+"base_type": "Node",
+"name": "EQ",
+"properties": {
+"_import_path": NodePath(""),
+"pause_mode": 1,
+"process_priority": 1,
+"resource": SubResource( 1 ),
+"script": ExtResource( 2 )
+}
+},
+"packed": false
+} ]
+
+[node name="EQ" type="Node" parent="."]
+pause_mode = 1
+process_priority = 1
+script = ExtResource( 2 )
+resource = SubResource( 1 )
+
+[node name="EQ10" type="Node" parent="EQ"]
+process_priority = 10
+script = ExtResource( 2 )
+resource = SubResource( 2 )
+
+[node name="EQ21" type="Node" parent="EQ"]
+pause_mode = 2
+process_priority = 21
+script = ExtResource( 2 )
+resource = SubResource( 3 )
+
+[node name="EQ6" type="Node" parent="EQ/EQ21"]
+pause_mode = 1
+process_priority = 6
+script = ExtResource( 2 )
+resource = SubResource( 4 )
